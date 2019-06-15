@@ -45,9 +45,14 @@ function compareProp(key) {
 }
 
 function getAllOf(schema) {
-  let { allOf = [], ...copy } = schema
+  let { allOf, ...copy } = schema
   copy = isPlainObject(schema) ? copy : schema // if schema is boolean
-  return [copy, ...allOf.map(getAllOf)]
+  if (Array.isArray(allOf)) {
+    return [copy, ...allOf.map(getAllOf)]
+  }
+
+  delete schema.allOf
+  return [copy]
 }
 
 function getValues(schemas, key) {
