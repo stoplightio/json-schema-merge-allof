@@ -23,6 +23,7 @@ var isEmptySchema = (obj) => (!keys(obj).length) && obj !== false && obj !== tru
 var isSchema = (val) => isPlainObject(val) || val === true || val === false
 var isFalse = (val) => val === false
 var isTrue = (val) => val === true
+var isNotNull = (val) => val !== null
 var schemaResolver = (compacted, key, mergeSchemas) => mergeSchemas(compacted)
 var stringArray = (values) => sortBy(uniq(flattenDeep(values)))
 var notUndefined = (val) => val !== undefined
@@ -48,7 +49,7 @@ function getAllOf(schema) {
   let { allOf, ...copy } = schema
   copy = isPlainObject(schema) ? copy : schema // if schema is boolean
   if (Array.isArray(allOf)) {
-    return [copy, ...allOf.map(getAllOf)]
+    return [copy, ...allOf.filter(isNotNull).map(getAllOf)]
   }
 
   delete schema.allOf

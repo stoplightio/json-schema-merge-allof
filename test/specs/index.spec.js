@@ -161,6 +161,47 @@ describe('module', function() {
     expect(result).to.eql({})
   })
 
+  it('filters out invalid allOf members', function() {
+    var result = merger({
+      allOf: [
+        null,
+        1,
+        0,
+        {
+          type: 'object',
+          properties: {
+            bar: {
+              type: 'string'
+            }
+          }
+        },
+        [],
+        '',
+        'foo',
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            }
+          }
+        }
+      ]
+    })
+
+    expect(result).to.eql({
+      type: 'object',
+      properties: {
+        bar: {
+          type: 'string'
+        },
+        foo: {
+          type: 'string'
+        }
+      }
+    })
+  })
+
   describe('simple resolve functionality', function() {
     it('merges with default resolver if not defined resolver', function() {
       var result = merger({
