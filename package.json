@@ -1,5 +1,5 @@
 {
-  "name": "json-schema-merge-allof",
+  "name": "@stoplight/json-schema-merge-allof",
   "version": "0.6.0",
   "description": "Simplify your schema by combining allOf into the root schema, safely.",
   "main": "src/index.js",
@@ -15,19 +15,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mokkabonna/json-schema-merge-allof.git"
+    "url": "git+https://github.com/stoplightio/json-schema-merge-allof.git"
   },
   "keywords": [
     "json",
     "schema",
     "jsonschema"
   ],
-  "author": "Martin Hansen",
+  "contributors": [
+    {
+      "name": "Stoplight <support@stoplight.io>",
+      "email": "support@stoplight.io"
+    },
+    {
+      "name": "Martin Hansen"
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mokkabonna/json-schema-merge-allof/issues"
+    "url": "https://github.com/stoplightio/json-schema-merge-allof/issues"
   },
-  "homepage": "https://github.com/mokkabonna/json-schema-merge-allof#readme",
+  "homepage": "https://github.com/stoplightio/json-schema-merge-allof#readme",
   "devDependencies": {
     "ajv": "^5.2.3",
     "chai": "^4.1.2",
