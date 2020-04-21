@@ -248,6 +248,10 @@ function createRequiredMetaArray(arr) {
   return {required: arr}
 }
 
+function default$RefResolver(obj) {
+  return obj
+}
+
 var propertyRelated = ['properties', 'patternProperties', 'additionalProperties']
 var itemsRelated = ['items', 'additionalItems']
 var schemaGroupProps = ['properties', 'patternProperties', 'definitions', 'dependencies']
@@ -442,7 +446,8 @@ function merger(rootSchema, options, totalSchemas) {
   options = defaultsDeep(options, {
     ignoreAdditionalProperties: false,
     resolvers: defaultResolvers,
-    deep: true
+    deep: true,
+    $refResolver: default$RefResolver
   })
 
   function mergeSchemas(schemas, base, parents) {
@@ -468,7 +473,10 @@ function merger(rootSchema, options, totalSchemas) {
     // there are no false and we don't need the true ones as they accept everything
     schemas = schemas.filter(isPlainObject)
 
+    schemas = schemas.map(schema => isPlainObject(schema) && '$ref' in schema ? options.$refResolver(schema.$ref) : schema)
+
     var allKeys = allUniqueKeys(schemas)
+
     if (options.deep && contains(allKeys, 'allOf')) {
       return merger({
         allOf: schemas

@@ -202,6 +202,94 @@ describe('module', function() {
     })
   })
 
+  it('is capable of resolving $refs', () => {
+    function $refResolver($ref) {
+      switch ($ref) {
+        case '#/foo':
+          return {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string'
+              }
+            }
+          }
+
+        case '#/bar':
+          return {
+            type: 'object',
+            properties: {
+              permissions: {
+                allOf: [
+                  {
+                    $ref: '#/permission'
+                  },
+                  {
+                    type: 'object',
+                    properties: {
+                      admin: {
+                        type: 'boolean'
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+
+        case '#/permission':
+          return {
+            type: 'object',
+            properties: {
+              level: {
+                type: 'number'
+              }
+            }
+          }
+      }
+    }
+
+    expect(merger({
+      allOf: [
+        {
+          $ref: '#/foo'
+        },
+        {
+          $ref: '#/bar'
+        },
+        {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string'
+            }
+          }
+        }
+      ]
+    }, { $refResolver })).to.eql({
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string'
+        },
+        name: {
+          type: 'string'
+        },
+        permissions: {
+          type: 'object',
+          properties: {
+            admin: {
+              type: 'boolean'
+            },
+            level: {
+              type: 'number'
+            }
+          }
+        }
+      }
+    })
+  })
+
   describe('simple resolve functionality', function() {
     it('merges with default resolver if not defined resolver', function() {
       var result = merger({
