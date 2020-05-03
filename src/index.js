@@ -1,4 +1,5 @@
 var cloneDeep = require('lodash/cloneDeep')
+var compact = require('lodash/compact')
 var compare = require('json-schema-compare')
 var computeLcm = require('compute-lcm')
 var defaultsDeep = require('lodash/defaultsDeep')
@@ -551,6 +552,25 @@ function merger(rootSchema, options, totalSchemas) {
 
 merger.options = {
   resolvers: defaultResolvers
+}
+
+merger.stoplightResolvers = {
+  defaultResolver(values) {
+    if (Array.isArray(values)) {
+      return values
+    }
+
+    return Object.assign({}, ...Object(values))
+  },
+  example(values) {
+    return defaultResolvers.enum(values) || null
+  },
+  enum(values) {
+    return defaultResolvers.enum(compact(values)) || []
+  },
+  $ref(values) {
+    return {}
+  }
 }
 
 module.exports = merger
