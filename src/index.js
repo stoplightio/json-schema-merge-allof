@@ -32,6 +32,7 @@ var allUniqueKeys = (arr) => uniq(flattenDeep(arr.map(keys)))
 
 // resolvers
 var first = compacted => compacted[0]
+var last = compacted => compacted[compacted.length - 1]
 var required = compacted => stringArray(compacted)
 var maximumValue = compacted => Math.max.apply(Math, compacted)
 var minimumValue = compacted => Math.min.apply(Math, compacted)
@@ -423,9 +424,9 @@ defaultResolvers.additionalItems = schemaResolver
 defaultResolvers.additionalProperties = schemaResolver
 defaultResolvers.anyOf = defaultResolvers.oneOf
 defaultResolvers.contains = schemaResolver
-defaultResolvers.default = first
+defaultResolvers.default = last
 defaultResolvers.definitions = defaultResolvers.dependencies
-defaultResolvers.description = first
+defaultResolvers.description = last
 defaultResolvers.examples = examples
 defaultResolvers.exclusiveMaximum = minimumValue
 defaultResolvers.exclusiveMinimum = maximumValue
@@ -439,7 +440,7 @@ defaultResolvers.minLength = maximumValue
 defaultResolvers.minProperties = maximumValue
 defaultResolvers.propertyNames = schemaResolver
 defaultResolvers.required = required
-defaultResolvers.title = first
+defaultResolvers.title = last
 defaultResolvers.uniqueItems = uniqueItems
 
 function merger(rootSchema, options, totalSchemas) {

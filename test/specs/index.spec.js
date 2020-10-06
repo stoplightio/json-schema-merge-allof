@@ -302,7 +302,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
-        title: 'schema1'
+        title: 'schema3'
       })
 
       var result3 = merger({
@@ -314,7 +314,7 @@ describe('module', function() {
       })
 
       expect(result3).to.eql({
-        title: 'schema2'
+        title: 'schema3'
       })
     })
 
@@ -1228,11 +1228,7 @@ describe('module', function() {
           default: ['prop2', 'prop1']
         }]
       })).to.eql({
-        default: [
-          'prop2', {
-            prop1: 'foo'
-          }
-        ]
+        default: ['prop2', 'prop1']
       })
     })
 
@@ -1245,9 +1241,7 @@ describe('module', function() {
           default: ['prop2', 'prop1']
         }]
       })).to.eql({
-        default: {
-          foo: 'bar'
-        }
+        default: ['prop2', 'prop1']
       })
     })
   })
@@ -1281,7 +1275,7 @@ describe('module', function() {
       })).to.eql({
         properties: {
           name: {
-            title: 'Name',
+            title: 'allof1',
             type: 'string'
           },
           added: {
@@ -1443,7 +1437,7 @@ describe('module', function() {
           },
           added: {
             type: 'integer',
-            title: 'pri1',
+            title: 'pri3',
             minimum: 15,
             maximum: 10
           }
