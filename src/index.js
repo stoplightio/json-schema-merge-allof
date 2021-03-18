@@ -1,4 +1,4 @@
-var cloneDeep = require('lodash/cloneDeep')
+var cloneDeep = require('fast-copy')
 var compact = require('lodash/compact')
 var compare = require('json-schema-compare')
 var computeLcm = require('compute-lcm')
