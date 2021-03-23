@@ -386,7 +386,7 @@ var defaultResolvers = {
     return returnObject
   },
   oneOf(compacted, paths, mergeSchemas) {
-    var combinations = getAnyOfCombinations(cloneDeep(compacted))
+    var combinations = getAnyOfCombinations(compacted)
     var result = tryMergeSchemaGroups(combinations, mergeSchemas)
     var unique = uniqWith(result, compare)
 
@@ -452,8 +452,10 @@ function merger(rootSchema, options, totalSchemas) {
     $refResolver: default$RefResolver
   })
 
+  rootSchema = cloneDeep(rootSchema)
+
   function mergeSchemas(schemas, base, parents) {
-    schemas = cloneDeep(schemas.filter(notUndefined))
+    schemas = schemas.filter(notUndefined)
     parents = parents || []
     var merged = isPlainObject(base)
       ? base
