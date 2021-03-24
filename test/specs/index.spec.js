@@ -8,11 +8,14 @@ var expect = chai.expect
 var ajv = new Ajv()
 
 function merger(schema, options) {
+  var schemaClone = _.cloneDeep(schema)
   var result = mergerModule(schema, options)
   try {
     if (!ajv.validateSchema(result)) {
       throw new Error('Schema returned by resolver isn\'t valid.')
     }
+
+    expect(schema).to.eql(schemaClone)
     return result
   } catch (e) {
     if (!/stack/i.test(e.message)) {
