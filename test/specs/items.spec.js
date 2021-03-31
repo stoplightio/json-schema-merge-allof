@@ -1,6 +1,14 @@
+'use strict'
 var chai = require('chai')
-var merger = require('../../src')
+var mergerModule = require('../../src')
 var expect = chai.expect
+
+function merger(schema, options) {
+  var schemaClone = JSON.parse(JSON.stringify(schema))
+  var result = mergerModule(schema, options)
+  expect(schema).to.deep.eql(schemaClone)
+  return result
+}
 
 describe('items', function() {
   it('merges additionalItems', function() {
