@@ -1,9 +1,16 @@
 var chai = require('chai')
-var merger = require('../../src')
 var sinon = require('sinon')
 var _ = require('lodash')
 var expect = chai.expect
 var Ajv = require('ajv')
+var mergerModule = require('../../src')
+
+function merger(schema, options) {
+  var schemaClone = JSON.parse(JSON.stringify(schema))
+  var result = mergerModule(schema, options)
+  expect(schema).to.deep.eql(schemaClone)
+  return result
+}
 
 var ajv = new Ajv()
 describe('properties', function() {

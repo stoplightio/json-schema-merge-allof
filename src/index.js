@@ -1,4 +1,4 @@
-var cloneDeep = require('fast-copy')
+'use strict'
 var compact = require('lodash/compact')
 var compare = require('json-schema-compare')
 var computeLcm = require('compute-lcm')
@@ -54,7 +54,6 @@ function getAllOf(schema) {
     return [copy, ...allOf.filter(isNotNull).map(getAllOf)]
   }
 
-  delete schema.allOf
   return [copy]
 }
 
@@ -296,6 +295,7 @@ var defaultResolvers = {
           var allOtherKeys = keys(other.properties)
           var keysMatchingPattern = allOtherKeys.filter(k => ownPatterns.some(pk => pk.test(k)))
           var additionalKeys = withoutArr(allOtherKeys, ownKeys, keysMatchingPattern)
+          other.properties = Object.assign({}, other.properties)
           additionalKeys.forEach(function(key) {
             other.properties[key] = mergers.properties([
               other.properties[key], subSchema.additionalProperties
@@ -310,6 +310,7 @@ var defaultResolvers = {
         var ownPatternKeys = keys(subSchema.patternProperties)
         if (subSchema.additionalProperties === false) {
           otherSubSchemas.forEach(function(other) {
+            other.patternProperties = Object.assign({}, other.patternProperties)
             var allOtherPatterns = keys(other.patternProperties)
             var additionalPatternKeys = withoutArr(allOtherPatterns, ownPatternKeys)
             additionalPatternKeys.forEach(key => delete other.patternProperties[key])
@@ -452,13 +453,11 @@ function merger(rootSchema, options, totalSchemas) {
     $refResolver: default$RefResolver
   })
 
-  rootSchema = cloneDeep(rootSchema)
-
   function mergeSchemas(schemas, base, parents) {
     schemas = schemas.filter(notUndefined)
     parents = parents || []
     var merged = isPlainObject(base)
-      ? base
+      ? Object.assign({}, base)
       : {}
 
     // return undefined, an empty schema
@@ -477,7 +476,7 @@ function merger(rootSchema, options, totalSchemas) {
     // there are no false and we don't need the true ones as they accept everything
     schemas = schemas.filter(isPlainObject)
 
-    schemas = schemas.map(schema => isPlainObject(schema) && '$ref' in schema ? options.$refResolver(schema.$ref) : schema)
+    schemas = schemas.map(schema => '$ref' in schema ? options.$refResolver(schema.$ref) : Object.assign({}, schema))
 
     var allKeys = allUniqueKeys(schemas)
 

@@ -1,3 +1,4 @@
+'use strict'
 var chai = require('chai')
 var mergerModule = require('../../src')
 var Ajv = require('ajv')
@@ -14,14 +15,14 @@ function merger(schema, options) {
     if (!ajv.validateSchema(result)) {
       throw new Error('Schema returned by resolver isn\'t valid.')
     }
-
-    expect(schema).to.eql(schemaClone)
-    return result
   } catch (e) {
     if (!/stack/i.test(e.message)) {
       throw e
     }
   }
+
+  expect(schema).to.deep.eql(schemaClone)
+  return result
 }
 
 describe('module', function() {

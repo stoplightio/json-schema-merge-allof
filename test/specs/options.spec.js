@@ -1,7 +1,13 @@
 var chai = require('chai')
-var merger = require('../../src')
-
+var mergerModule = require('../../src')
 var expect = chai.expect
+
+function merger(schema, options) {
+  var schemaClone = JSON.parse(JSON.stringify(schema))
+  var result = mergerModule(schema, options)
+  expect(schema).to.deep.eql(schemaClone)
+  return result
+}
 
 describe('options', function() {
   it('allows otherwise incompatible properties if option ignoreAdditionalProperties is true', function() {

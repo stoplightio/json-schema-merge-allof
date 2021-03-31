@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "compute-lcm": "^1.1.0",
-    "fast-copy": "^2.1.1",
     "json-schema-compare": "^0.2.2",
     "lodash": "^4.17.4"
   }
