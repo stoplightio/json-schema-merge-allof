@@ -62,7 +62,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         additionalProperties: false
       })
     })
@@ -83,7 +82,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           bar: true
         },
@@ -111,7 +109,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           bar: true,
           foo123: true
@@ -143,7 +140,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           foo123: true
         },
@@ -177,7 +173,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           foo123: true,
           bar123: true
@@ -218,7 +213,6 @@ describe('properties', function() {
       expect(result).not.to.eql(origSchema)
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           bar: true,
           foo123: true,
@@ -601,7 +595,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         patternProperties: {
           '^\\$.+': {
             type: [
@@ -638,7 +631,6 @@ describe('properties', function() {
       })
 
       expect(result).to.eql({
-        type: 'object',
         patternProperties: {
           '.*': {
             type: 'string',
@@ -685,7 +677,6 @@ describe('properties', function() {
       expect(result).not.to.eql(origSchema)
 
       expect(result).to.eql({
-        type: 'object',
         properties: {
           'foo_long': {
             type: 'string',
