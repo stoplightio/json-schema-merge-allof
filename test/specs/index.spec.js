@@ -760,6 +760,7 @@ describe('module', function() {
             ],
             required: ['123']
           }, {
+            type: 'object',
             required: ['abc']
           }]
         }, {
@@ -784,12 +785,7 @@ describe('module', function() {
           ],
           'required': ['123', 'abc']
         }, {
-          'type': ['string'],
-          'required': ['abc']
-        }, {
-          'type': [
-            'object', 'array'
-          ],
+          'type': 'object',
           'required': ['abc']
         }]
       })
@@ -1622,9 +1618,7 @@ describe('module', function() {
       var result = merger({
         dependencies: {
           'bar': {
-            type: [
-              'string', 'null', 'integer'
-            ],
+            type: 'object',
             required: ['abc']
           }
         },
@@ -1638,9 +1632,7 @@ describe('module', function() {
       expect(result).to.eql({
         dependencies: {
           'bar': {
-            type: [
-              'string', 'null', 'integer'
-            ],
+            type: 'object',
             required: ['abc', 'prop4']
           }
         }
