@@ -255,7 +255,7 @@ function default$RefResolver(obj) {
 
 function inferType(schema) {
   if (!isPlainObject(schema)) return
-  if ('type' in schema) return schema.type
+  if ('type' in schema) return typeof schema.type === 'string' ? schema.type : undefined
 
   var types = Object.keys(implicitTypes).filter(type => implicitTypes[type].some(prop => prop in schema))
   if (types.length > 0) return types
