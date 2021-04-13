@@ -28,6 +28,7 @@ describe('options', function() {
     })
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         foo: true,
         bar: true
@@ -70,6 +71,7 @@ describe('options', function() {
     })
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         foo: true,
         bar: true
@@ -158,9 +160,11 @@ describe('options', function() {
     })
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         foo: {type: 'string'},
         bar: {
+          type: 'object',
           properties: {
             baz: {type: 'string'}
           }
@@ -186,6 +190,7 @@ describe('options', function() {
     }, {deep: false})
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         foo: {type: 'string'},
         bar: {

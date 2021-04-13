@@ -253,6 +253,26 @@ function default$RefResolver(obj) {
   return obj
 }
 
+function inferType(schema) {
+  if (!isPlainObject(schema)) return {}
+  if ('type' in schema) {
+    return { type: schema.type }
+  }
+
+  var types = []
+  for (let type of Object.keys(implicitTypes)) {
+    if (implicitTypes[type].some(prop => prop in schema)) {
+      types.push(type)
+    }
+  }
+
+  if (types.length === 0) {
+    return {}
+  }
+
+  return { type: types.length === 1 ? types[0] : types }
+}
+
 var propertyRelated = ['properties', 'patternProperties', 'additionalProperties']
 var itemsRelated = ['items', 'additionalItems']
 var schemaGroupProps = ['properties', 'patternProperties', 'definitions', 'dependencies']
@@ -265,6 +285,14 @@ var schemaProps = [
   'not',
   'items'
 ]
+
+var implicitTypes = {
+  object: [...propertyRelated], //, 'required'],
+  array: [...itemsRelated, 'contains', 'uniqueItems', 'minContains', 'maxContains'],
+  // number: ['multipleOf', 'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum'],
+  // get integer() { return this.number },
+  string: ['pattern', 'minLength', 'maxLength']
+}
 
 var defaultResolvers = {
   type(compacted) {
@@ -476,7 +504,7 @@ function merger(rootSchema, options, totalSchemas) {
     // there are no false and we don't need the true ones as they accept everything
     schemas = schemas.filter(isPlainObject)
 
-    schemas = schemas.map(schema => '$ref' in schema ? options.$refResolver(schema.$ref) : Object.assign({}, schema))
+    schemas = schemas.map(schema => '$ref' in schema ? options.$refResolver(schema.$ref) : Object.assign(inferType(schema), schema))
 
     var allKeys = allUniqueKeys(schemas)
 

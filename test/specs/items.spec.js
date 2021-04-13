@@ -40,6 +40,7 @@ describe('items', function() {
     })
 
     expect(result).to.eql({
+      type: 'array',
       items: [{
         type: 'object'
       }],
@@ -76,6 +77,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         items: {
           type: 'string',
           pattern: 'abc.*',
@@ -108,6 +110,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         items: [{
           type: 'string',
           minLength: 5
@@ -141,6 +144,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         additionalItems: false,
         items: [{
           type: 'string',
@@ -174,6 +178,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         additionalItems: false,
         items: [{
           type: 'string',
@@ -213,6 +218,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         additionalItems: {
           type: 'integer',
           minimum: 15
@@ -268,6 +274,7 @@ describe('items', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         additionalItems: {
           type: 'integer',
           minimum: 10,

@@ -44,9 +44,12 @@ describe('module', function() {
     })
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         list: {
+          type: 'array',
           items: {
+            type: 'object',
             properties: {
               test: true
             }
@@ -69,6 +72,7 @@ describe('module', function() {
     var result = merger(schema)
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         test: true
       }
@@ -149,6 +153,7 @@ describe('module', function() {
     })
 
     expect(result).to.eql({
+      type: 'object',
       properties: {
         foo: {
           type: 'string'
@@ -332,6 +337,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
+        type: 'string',
         minLength: 5
       })
     })
@@ -430,6 +436,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
+        type: 'string',
         maxLength: 4
       })
     })
@@ -444,6 +451,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         uniqueItems: true
       })
 
@@ -454,6 +462,7 @@ describe('module', function() {
           uniqueItems: false
         }]
       })).to.eql({
+        type: 'array',
         uniqueItems: false
       })
     })
@@ -468,6 +477,20 @@ describe('module', function() {
           }]
         })
       }).to.throw(/incompatible/)
+    })
+
+    it('throws if merging incompatible inferred type', function() {
+      var result = merger.bind(null, {
+        allOf: [
+          {
+            properties: {}
+          },
+          {
+            type: 'string'
+          }
+        ]
+      })
+      expect(result).to.throw(/incompatible/)
     })
 
     it('merges type if conflict', function() {
@@ -1006,7 +1029,9 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
+        type: 'array',
         contains: {
+          type: 'object',
           properties: {
             name: {
               type: 'string',
@@ -1027,6 +1052,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
+        type: 'string',
         pattern: '(?=fdsaf)(?=abba)'
       })
 
@@ -1037,6 +1063,7 @@ describe('module', function() {
       })
 
       expect(result2).to.eql({
+        type: 'string',
         pattern: 'abba'
       })
     })
@@ -1273,6 +1300,7 @@ describe('module', function() {
           }
         }]
       })).to.eql({
+        type: 'object',
         properties: {
           name: {
             title: 'allof1',
@@ -1309,6 +1337,7 @@ describe('module', function() {
           }
         }]
       })).to.eql({
+        type: 'object',
         properties: {
           name: {
             title: 'allof1',
@@ -1341,6 +1370,7 @@ describe('module', function() {
           }
         }]
       })).to.eql({
+        type: 'object',
         properties: {
           name: false,
           added: {
@@ -1370,6 +1400,7 @@ describe('module', function() {
           }
         }]
       })).to.eql({
+        type: 'object',
         properties: {
           name: false,
           added: {
@@ -1431,8 +1462,10 @@ describe('module', function() {
           }
         }]
       })).to.eql({
+        type: 'object',
         properties: {
           name: {
+            type: 'string',
             pattern: '^.+$'
           },
           added: {
