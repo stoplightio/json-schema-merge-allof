@@ -253,6 +253,14 @@ function default$RefResolver(obj) {
   return obj
 }
 
+function inferType(schema) {
+  if (!isPlainObject(schema)) return
+  if ('type' in schema) return typeof schema.type === 'string' ? schema.type : undefined
+
+  var types = Object.keys(implicitTypes).filter(type => implicitTypes[type].some(prop => prop in schema))
+  if (types.length > 0) return types
+}
+
 var propertyRelated = ['properties', 'patternProperties', 'additionalProperties']
 var itemsRelated = ['items', 'additionalItems']
 var schemaGroupProps = ['properties', 'patternProperties', 'definitions', 'dependencies']
@@ -265,6 +273,14 @@ var schemaProps = [
   'not',
   'items'
 ]
+
+var implicitTypes = {
+  object: [...propertyRelated, 'required'],
+  array: [...itemsRelated, 'contains', 'uniqueItems', 'minContains', 'maxContains'],
+  number: ['multipleOf', 'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum'],
+  get integer() { return this.number },
+  string: ['pattern', 'minLength', 'maxLength']
+}
 
 var defaultResolvers = {
   type(compacted) {
@@ -477,6 +493,17 @@ function merger(rootSchema, options, totalSchemas) {
     schemas = schemas.filter(isPlainObject)
 
     schemas = schemas.map(schema => '$ref' in schema ? options.$refResolver(schema.$ref) : Object.assign({}, schema))
+
+    var types = schemas.map(schema => inferType(schema)).filter(notUndefined)
+
+    if (types.length > 1) {
+      let first = Array.isArray(types[0]) ? types[0] : [types[0]]
+      types.slice(1).forEach(function (type) {
+        if (Array.isArray(type) ? !intersection(first, type).length : !first.includes(type)) {
+          throwIncompatible(types, parents.concat('type'))
+        }
+      })
+    }
 
     var allKeys = allUniqueKeys(schemas)
 

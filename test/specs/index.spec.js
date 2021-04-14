@@ -470,6 +470,30 @@ describe('module', function() {
       }).to.throw(/incompatible/)
     })
 
+    it('throws if merging incompatible inferred type', function() {
+      expect(merger.bind(null, {
+        allOf: [
+          {
+            properties: {}
+          },
+          {
+            type: 'string'
+          }
+        ]
+      })).to.throw(/incompatible/)
+
+      expect(merger.bind(null, {
+        allOf: [
+          {
+            minimum: 4
+          },
+          {
+            type: 'string'
+          }
+        ]
+      })).to.throw(/incompatible/)
+    })
+
     it('merges type if conflict', function() {
       var result = merger({
         allOf: [{}, {
