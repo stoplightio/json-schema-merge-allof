@@ -306,7 +306,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
-        title: 'schema3'
+        title: 'schema1'
       })
 
       var result3 = merger({
@@ -318,7 +318,7 @@ describe('module', function() {
       })
 
       expect(result3).to.eql({
-        title: 'schema3'
+        title: 'schema2'
       })
     })
 
@@ -455,6 +455,100 @@ describe('module', function() {
         }]
       })).to.eql({
         uniqueItems: false
+      })
+    })
+
+    it('merges titles to the first occurrence', function() {
+      expect(merger({
+        allOf: [
+          {
+            title: 'First',
+            type: 'object',
+            properties: {
+              a: {
+                type: 'string'
+              }
+            }
+          },
+          {
+            title: 'Last',
+            type: 'object',
+            properties: {
+              b: {
+                type: 'string'
+              }
+            }
+          }
+        ]
+      }
+      )).to.eql({
+        type: 'object',
+        title: 'First',
+        properties: {
+          a: {
+            type: 'string'
+          },
+          b: {
+            type: 'string'
+          }
+        }
+      })
+    })
+
+    it('merges titles to the most outer one', function() {
+      expect(merger({
+        allOf: [
+          {
+            properties: {
+              a: {
+                type: 'string'
+              }
+            }
+          },
+          {
+            title: 'Outer',
+            allOf: [
+              {
+                title: 'Inner',
+                type: 'object',
+                properties: {
+                  b: {
+                    type: 'number'
+                  },
+                  c: {
+                    type: 'string'
+                  }
+                }
+              },
+              {
+                type: 'object',
+                properties: {
+                  d: {
+                    type: 'string'
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+      )).to.eql({
+        type: 'object',
+        title: 'Outer',
+        properties: {
+          a: {
+            type: 'string'
+          },
+          b: {
+            type: 'number'
+          },
+          c: {
+            type: 'string'
+          },
+          d: {
+            type: 'string'
+          }
+        }
       })
     })
 
@@ -1299,7 +1393,7 @@ describe('module', function() {
       })).to.eql({
         properties: {
           name: {
-            title: 'allof1',
+            title: 'Name',
             type: 'string'
           },
           added: {
@@ -1461,7 +1555,7 @@ describe('module', function() {
           },
           added: {
             type: 'integer',
-            title: 'pri3',
+            title: 'pri1',
             minimum: 15,
             maximum: 10
           }

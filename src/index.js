@@ -457,7 +457,7 @@ defaultResolvers.minLength = maximumValue
 defaultResolvers.minProperties = maximumValue
 defaultResolvers.propertyNames = schemaResolver
 defaultResolvers.required = required
-defaultResolvers.title = last
+defaultResolvers.title = first
 defaultResolvers.uniqueItems = uniqueItems
 
 function merger(rootSchema, options, totalSchemas) {
