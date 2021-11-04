@@ -306,7 +306,7 @@ describe('module', function() {
       })
 
       expect(result).to.eql({
-        title: 'schema3'
+        title: 'schema1'
       })
 
       var result3 = merger({
@@ -1691,6 +1691,76 @@ describe('module', function() {
           minLength: 5,
           maxLength: 7
         }
+      })
+    })
+  })
+
+  describe('title merging', function () {
+    it('prefers the last occurrence', function() {
+      expect(merger({
+        allOf: [
+          {
+            title: 'First'
+          },
+          {
+            title: 'Last'
+          }
+        ]
+      }
+      )).to.eql({
+        title: 'Last'
+      })
+    })
+
+    it('prefers the top-level occurrence', function() {
+      expect(merger({
+        title: 'Top Level',
+        allOf: [
+          {
+            title: 'First'
+          },
+          {
+            title: 'Last'
+          }
+        ]
+      }
+      )).to.eql({
+        title: 'Top Level'
+      })
+    })
+  })
+
+  describe('description merging', function () {
+    it('prefers the last occurrence', function() {
+      expect(merger({
+        allOf: [
+          {
+            description: 'First'
+          },
+          {
+            description: 'Last'
+          }
+        ]
+      }
+      )).to.eql({
+        description: 'Last'
+      })
+    })
+
+    it('prefers the top-level occurrence', function() {
+      expect(merger({
+        description: 'Top Level',
+        allOf: [
+          {
+            description: 'First'
+          },
+          {
+            description: 'Last'
+          }
+        ]
+      }
+      )).to.eql({
+        description: 'Top Level'
       })
     })
   })
