@@ -10,6 +10,7 @@ var intersectionWith = require('lodash/intersectionWith')
 var isEqual = require('lodash/isEqual')
 var isPlainObject = require('lodash/isPlainObject')
 var pullAll = require('lodash/pullAll')
+var pick = require('lodash/pick')
 var sortBy = require('lodash/sortBy')
 var forEach = require('lodash/forEach')
 var uniq = require('lodash/uniq')
@@ -29,6 +30,9 @@ var schemaResolver = (compacted, key, mergeSchemas) => mergeSchemas(compacted)
 var stringArray = (values) => sortBy(uniq(flattenDeep(values)))
 var notUndefined = (val) => val !== undefined
 var allUniqueKeys = (arr) => uniq(flattenDeep(arr.map(keys)))
+var hasInThis = function (annotation) {
+  return annotation in this
+}
 
 // resolvers
 var first = compacted => compacted[0]
@@ -51,6 +55,10 @@ function getAllOf(schema) {
   let { allOf, ...copy } = schema
   copy = isPlainObject(schema) ? copy : schema // if schema is boolean
   if (Array.isArray(allOf)) {
+    if (annotationProps.some(hasInThis, copy)) {
+      return [copy, ...allOf.filter(isNotNull).map(getAllOf), pick(copy, annotationProps)]
+    }
+
     return [copy, ...allOf.filter(isNotNull).map(getAllOf)]
   }
 
@@ -273,6 +281,7 @@ var schemaProps = [
   'not',
   'items'
 ]
+var annotationProps = ['title', 'description']
 
 var implicitTypes = {
   object: [...propertyRelated, 'required'],
@@ -520,8 +529,8 @@ function merger(rootSchema, options, totalSchemas) {
     pullAll(allKeys, itemKeys)
 
     allKeys.forEach(function(key) {
-      var values = getValues(schemas, key)
-      var compacted = uniqWith(values.filter(notUndefined), compareProp(key))
+      var values = getValues(schemas, key).filter(notUndefined)
+      var compacted = annotationProps.includes(key) ? values : uniqWith(values, compareProp(key))
 
       // arrayprops like anyOf and oneOf must be merged first, as they contains schemas
       // allOf is treated differently alltogether
