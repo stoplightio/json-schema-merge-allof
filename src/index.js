@@ -257,8 +257,8 @@ function createRequiredMetaArray(arr) {
   return {required: arr}
 }
 
-function default$RefResolver(obj) {
-  return obj
+function default$RefResolver(reference) {
+  return {$ref: reference}
 }
 
 function inferType(schema) {
