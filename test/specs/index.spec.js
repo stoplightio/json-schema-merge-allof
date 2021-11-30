@@ -206,6 +206,16 @@ describe('module', function() {
     })
   })
 
+  it('default $ref resolver leaves schema unchanged', function() {
+    const expected = {
+      $ref: '#/yonder'
+    }
+
+    const actual = merger(expected)
+
+    expect(actual).to.deep.equal(expected)
+  })
+
   it('is capable of resolving $refs', () => {
     function $refResolver($ref) {
       switch ($ref) {
