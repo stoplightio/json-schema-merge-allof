@@ -163,6 +163,26 @@ function cleanupReturnValue(returnObject) {
   return returnObject
 }
 
+function applyOverrides(originalValue, newValue) {
+  if (
+    isPlainObject(newValue) &&
+    isPlainObject(originalValue) &&
+    ('summary' in originalValue || 'description' in originalValue)
+  ) {
+    return {
+      ...newValue,
+      ...('description' in originalValue
+        ? { description: originalValue.description }
+        : null),
+      ...('summary' in originalValue
+        ? { summary: originalValue.summary }
+        : null)
+    }
+  }
+
+  return newValue
+}
+
 function createRequiredSubMerger(mergeSchemas, key, parents) {
   return function(schemas, subKey) {
     if (subKey === undefined) {
@@ -501,7 +521,10 @@ function merger(rootSchema, options, totalSchemas) {
     // there are no false and we don't need the true ones as they accept everything
     schemas = schemas.filter(isPlainObject)
 
-    schemas = schemas.map(schema => '$ref' in schema ? options.$refResolver(schema.$ref) : Object.assign({}, schema))
+    schemas = schemas.map(schema => '$ref' in schema ? applyOverrides(
+      schema,
+      options.$refResolver(schema.$ref)
+    ) : Object.assign({}, schema))
 
     var types = schemas.map(schema => inferType(schema)).filter(notUndefined)
 
