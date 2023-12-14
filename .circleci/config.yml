@@ -11,11 +11,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-      - run:
           name: Publish package
-          command: npm publish
+          command: |
+            npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            npm publish
 
 workflows:
   version: 2
