@@ -196,6 +196,16 @@ The library will then throw an error reporting the values that had no valid inte
 
 Create tests for new functionality and follow the eslint rules.
 
+### Release to NPM
+
+To create a release:
+-  Ensure all changes for the release are merged into the `master` branch. 
+- Update your local `master` branch with upstream
+- Run `git tag <*.*.*>` to tag a new version, following semver guidelines for bumping the version. For example: `git tag 0.7.6`
+- Run `git push origin <*.*.*>`
+
+After you push the tag, the circleci workflow will publish to npm. 
+
 ## License
 
 MIT © [Martin Hansen](http://martinhansen.com)
